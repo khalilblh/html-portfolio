@@ -40,28 +40,30 @@
 <body>
 
   <h2>اختبار بسيط</h2>
+  
   <div class="question">
-    <p>1-ما هو اخطر كائن بحري؟</p>
-    <label><input type="radio" name="q1" value="حوت الاوركا"> حوت الاوركا</label><br>
+    <p>1- ما هو أخطر كائن بحري؟</p>
+    <label><input type="radio" name="q1" value="حوت"> حوت</label><br>
+    <label><input type="radio" name="q1" value="أوركا"> أوركا</label><br>
     <label><input type="radio" name="q1" value="ميغالدون"> ميغالدون</label><br>
-    <label><input type="radio" name="q1" value="قنديل بحر المكعبي"> قنديل البحر المكعبي </label>
+    <label><input type="radio" name="q1" value="قنديل بحر مكعبي"> قنديل بحر مكعبي</label>
   </div>
 
   <div class="question">
-    <p>اخطر كائن في سماء؟</p>
-    <label><input type="radio" name="q2" value="صقر"> صقر</label><br>
-    <label><input type="radio" name="q2" value="خفاش"> خفاش</label><br>
-    <label><input type="radio" name="q2" value="شهين"> شهين</label>
+    <p>2- ما هو أسرع حيوان؟</p>
+    <label><input type="radio" name="q2" value="شهين"> شهين</label><br>
+    <label><input type="radio" name="q2" value="فهد"> فهد</label><br>
+    <label><input type="radio" name="q2" value="حوت"> حوت</label>
   </div>
 
   <div class="question">
-    <p>3-  اصعب لغة في العالم؟</p>
-    <label><input type="radio" name="q3" value="العربية"> العربية </label><br>
-    <label><input type="radio" name="q3" value="الصينية "> الصينية</label><br>
-    <label><input type="radio" name="q3" value="الانجليزية"> الانجليزية</label>
+    <p>3- ما هي أصعب لغة؟</p>
+    <label><input type="radio" name="q3" value="العربية"> العربية</label><br>
+    <label><input type="radio" name="q3" value="الصينية"> الصينية</label><br>
+    <label><input type="radio" name="q3" value="الإنجليزية"> الإنجليزية</label>
   </div>
 
-  <button onclick="generateLink()"> ارسل اجابتك </button>
+  <button onclick="generateLink()">توليد رابط الإجابات</button>
 
   <div id="linkResult" class="result" style="display:none;"></div>
 
@@ -72,10 +74,15 @@
         let val = document.querySelector('input[name="'+q+'"]:checked');
         if(val) answers[q] = val.value;
       });
+      // تشفير الإجابات
       let encoded = btoa(JSON.stringify(answers));
-      let url = window.location.origin + window.location.pathname + "?ans=" + encoded;
-      document.getElementById("linkResult").style.display = "block";
-      document.getElementById("linkResult").innerHTML = 
+      // توليد الرابط الصحيح
+      let url = window.location.href.split("?")[0] + "?ans=" + encoded;
+      
+      // إظهار الرابط
+      let box = document.getElementById("linkResult");
+      box.style.display = "block";
+      box.innerHTML = 
         "<p>انسخ هذا الرابط وشاركه:</p><input type='text' value='"+url+"' style='width:100%'>";
     }
 
@@ -87,9 +94,9 @@
         let resultBox = document.createElement("div");
         resultBox.className = "result";
         resultBox.innerHTML = "<h3>إجابات المختار:</h3>";
-        for(let q in decoded){
-          resultBox.innerHTML += "<p><b>"+q+"</b>: "+decoded[q]+"</p>";
-        }
+        if(decoded.q1) resultBox.innerHTML += "<p><b>س1:</b> "+decoded.q1+"</p>";
+        if(decoded.q2) resultBox.innerHTML += "<p><b>س2:</b> "+decoded.q2+"</p>";
+        if(decoded.q3) resultBox.innerHTML += "<p><b>س3:</b> "+decoded.q3+"</p>";
         document.body.appendChild(resultBox);
       }
     }
