@@ -35,6 +35,10 @@
       margin-top: 20px;
       border-radius: 8px;
     }
+    input[type=text] {
+      width: 100%;
+      padding: 8px;
+    }
   </style>
 </head>
 <body>
@@ -74,16 +78,26 @@
         let val = document.querySelector('input[name="'+q+'"]:checked');
         if(val) answers[q] = val.value;
       });
+
+      if(Object.keys(answers).length === 0) {
+        alert("اختر على الأقل إجابة واحدة!");
+        return;
+      }
+
       // تشفير الإجابات
       let encoded = btoa(JSON.stringify(answers));
-      // توليد الرابط الصحيح
-      let url = window.location.href.split("?")[0] + "?ans=" + encoded;
+
+      // تحديد رابط الموقع بدون باراميترات
+      let baseUrl = window.location.origin + window.location.pathname;
+
+      // توليد الرابط
+      let url = baseUrl + "?ans=" + encoded;
       
       // إظهار الرابط
       let box = document.getElementById("linkResult");
       box.style.display = "block";
       box.innerHTML = 
-        "<p>انسخ هذا الرابط وشاركه:</p><input type='text' value='"+url+"' style='width:100%'>";
+        "<p>انسخ هذا الرابط وشاركه:</p><input type='text' readonly value='"+url+"'>";
     }
 
     // عند فتح الرابط بإجابات مشفرة
