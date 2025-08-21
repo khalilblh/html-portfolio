@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>اختبار بسيط</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      background: #f8f8f8;
+      padding: 20px;
+    }
+    .question {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px #aaa;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #4caf50;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .result {
+      background: #e0f7fa;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>اختبار بسيط</h2>
+  <div class="question">
+    <p>1-ما هو اخطر كائن بحري؟</p>
+    <label><input type="radio" name="q1" value="حوت الاوركا"> حوت الاوركا</label><br>
+    <label><input type="radio" name="q1" value="ميغالدون"> ميغالدون</label><br>
+    <label><input type="radio" name="q1" value="قنديل بحر المكعبي"> قنديل البحر المكعبي </label>
+  </div>
+
+  <div class="question">
+    <p>اخطر كائن في سماء؟</p>
+    <label><input type="radio" name="q2" value="صقر"> صقر</label><br>
+    <label><input type="radio" name="q2" value="خفاش"> خفاش</label><br>
+    <label><input type="radio" name="q2" value="شهين"> شهين</label>
+  </div>
+
+  <div class="question">
+    <p>3-  اصعب لغة في العالم؟</p>
+    <label><input type="radio" name="q3" value="العربية"> العربية </label><br>
+    <label><input type="radio" name="q3" value="الصينية "> الصينية</label><br>
+    <label><input type="radio" name="q3" value="الانجليزية"> الانجليزية</label>
+  </div>
+
+  <button onclick="generateLink()"> ارسل اجابتك </button>
+
+  <div id="linkResult" class="result" style="display:none;"></div>
+
+  <script>
+    function generateLink() {
+      let answers = {};
+      ["q1","q2","q3"].forEach(q=>{
+        let val = document.querySelector('input[name="'+q+'"]:checked');
+        if(val) answers[q] = val.value;
+      });
+      let encoded = btoa(JSON.stringify(answers));
+      let url = window.location.origin + window.location.pathname + "?ans=" + encoded;
+      document.getElementById("linkResult").style.display = "block";
+      document.getElementById("linkResult").innerHTML = 
+        "<p>انسخ هذا الرابط وشاركه:</p><input type='text' value='"+url+"' style='width:100%'>";
+    }
+
+    // عند فتح الرابط بإجابات مشفرة
+    window.onload = function(){
+      const params = new URLSearchParams(window.location.search);
+      if(params.has("ans")){
+        let decoded = JSON.parse(atob(params.get("ans")));
+        let resultBox = document.createElement("div");
+        resultBox.className = "result";
+        resultBox.innerHTML = "<h3>إجابات المختار:</h3>";
+        for(let q in decoded){
+          resultBox.innerHTML += "<p><b>"+q+"</b>: "+decoded[q]+"</p>";
+        }
+        document.body.appendChild(resultBox);
+      }
+    }
+  </script>
+</body>
+</html>
